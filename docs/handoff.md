@@ -104,6 +104,28 @@ Registered as a Cordis plugin with `inject = ['connection', 'sessionPersistence'
 | `$DSH_HOME/storages/workspace.json` | Workspace domain v2: `global.archivedSessionIds`, `global.pinnedSessionIds`, `tables.workspaces[ws].sessionIds`. |
 | `engines.dsh` | `^0.2.1-rc.5`; DSH says “Prereleases participate in range matching”, so `0.2.2-rc.1` passes. Re-check on 0.3.x. |
 
+### `header.parentSession`: subagent children only
+
+- Exactly one writer: `@deepseek-ai/dsh-subagent`'s `childSessionMeta()` passes
+  `parentSession: parentHeader.id` together with `origin: 'subagent'` and
+  `delegationDepth` to `ctx.agents.create()`. Header validation permits no other
+  `origin` value, so this field cannot mark an ordinary Session.
+- Producing operations: the `subagent` and `subagent_fork` tools, `workflow`'s
+  `agent()` (via `subagents.startActivation`), Agent Team `spawn_teammate`, and
+  nested delegation (a grandchild points at the intermediate subagent, never at
+  the root).
+- Not produced by: session-level `session.fork` (the sidebar fork/handoff
+  action), new Sessions, archive/restore. The Client documents that "the fork
+  has no durable source relationship" (`sessions/manager.fork`); a fork child
+  copies the source event prefix into its own log (`buildForkSeed`,
+  `inheritedEventCount`) and remains self-contained.
+- Legacy: `lineage.js` notes that historical ordinary forks may retain a parent
+  id without being subagents; such orphans render as roots and are never
+  dropped.
+- Consequence for deletion: `descendantIds()` can only ever collect subagent
+  children. Deleting a Session never deletes Sessions forked from it, and a
+  forked Session keeps working after the Session it was cut from is deleted.
+
 ### Error-class detail
 
 0.2.2’s Host throws `WorkspaceActiveSessionError`, but the Client
@@ -128,6 +150,8 @@ maintenance remains necessary. A future official API should replace it.
   can resume Sessions. If the user unarchives it before restarting, the queued
   entry is dropped without deleting.
 - Subagent descendants are removed with the root (logs + projection cache).
+  Ordinary (session-level) forks are not descendants: their logs are
+  self-contained copies, so deleting the source Session leaves them intact.
 - Queued deletion file: `$DSH_HOME/session-archive/pending.json` (plugin-owned;
   empty file removed).
 - Project files and shared attachments are never touched.
