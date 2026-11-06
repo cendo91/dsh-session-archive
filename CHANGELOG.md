@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1
+
+- Verified against DeepSeek Harness 0.2.2-rc.1. No functional changes: the sidebar
+  panel, archive/restore actions, deletion, the deferred-deletion queue, and the
+  connected-window removal broadcast all continue to work with the new release.
+- Documentation now names both tested DSH versions.
+
 ## 1.0.0
 
 First public release.

@@ -7,7 +7,7 @@ English | [中文](#中文说明)
 ## Requirements
 
 - DeepSeek Harness 0.2.x with the Web UI (Desktop Web or standalone Web profile).
-- Tested with **0.2.1-rc.5**. No runtime dependencies and no build step.
+- Tested with **0.2.1-rc.5** and **0.2.2-rc.1**. No runtime dependencies and no build step.
 
 ## Install
 
