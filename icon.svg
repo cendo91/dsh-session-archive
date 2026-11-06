@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Session archive">
+  <path d="M32 10v12" stroke="#2f6fed" stroke-width="4" stroke-linecap="round"/>
+  <path d="m25 17 7 7 7-7" fill="none" stroke="#2f6fed" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="7" y="26" width="50" height="11" rx="4" fill="#2f6fed"/>
+  <path d="M12 37h40v13a5 5 0 0 1-5 5H17a5 5 0 0 1-5-5V37Z" fill="#dbe7ff"/>
+  <path d="M12 37h40v4H12z" fill="#9dbcf7"/>
+  <rect x="26" y="45" width="12" height="4" rx="2" fill="#2f6fed"/>
+</svg>

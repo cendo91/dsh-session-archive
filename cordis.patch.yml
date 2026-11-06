@@ -1,0 +1,4 @@
+- insert:
+    - id: session-archive
+      name: '@cendo91/dsh-session-archive'
+      config: {}

@@ -1,0 +1,63 @@
+{
+  "name": "@cendo91/dsh-session-archive",
+  "version": "1.0.0",
+  "private": false,
+  "description": "DSH Web UI panel to browse, restore, archive, and permanently delete archived Sessions.",
+  "type": "module",
+  "license": "MIT",
+  "author": "cendo91",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cendo91/dsh-session-archive.git"
+  },
+  "homepage": "https://github.com/cendo91/dsh-session-archive#readme",
+  "bugs": {
+    "url": "https://github.com/cendo91/dsh-session-archive/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "session",
+    "archive",
+    "sidebar"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg"
+  ],
+  "scripts": {
+    "check": "node --check index.js && node --check client.js",
+    "pack:check": "npm pack --dry-run"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ]
+    }
+  },
+  "engines": {
+    "dsh": "^0.2.1-rc.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
