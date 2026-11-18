@@ -208,6 +208,17 @@ git push origin vX.Y.Z
   `--otp=<code>`. Tokens are 7-day by default; never commit them. npm will remove
   bypass-token direct publishing in January 2027; then use Trusted Publishing or
   stage-only.
+  - Diagnose auth before publishing, never from the publish error: an expired or
+    revoked token makes `PUT` answer **404 Not Found** (`@cendo91/dsh-session-archive@X
+    is not in this registry`), not 401. Run `npm whoami` first; a 401 means rotate.
+  - Rotating: npmjs.com → avatar → Access Tokens → Generate New Token → Granular,
+    package `@cendo91/dsh-session-archive` (or the `@cendo91` scope), permissions
+    **Read and write (publish and stage)** (stage-only refuses plain `npm publish`),
+    Organizations **No access** without selecting one (otherwise the form refuses:
+    "must select at least one organization"), **Bypass 2FA** checked, IP ranges
+    empty, then replace the `_authToken` line in `%USERPROFILE%\.npmrc`.
+  - Never `npm config get`/`Get-Content` the npmrc inside a DSH session: the output
+    would put the plaintext token in the conversation log.
 - GitHub Release: web UI, or API with the user’s stored git credential (never
   print the token). Tag must exist on the remote first.
 - Local install upgrade:
