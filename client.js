@@ -776,6 +776,10 @@ window.__ModuleLoader__.load({
                 'div',
                 {
                   className: 'sa-modal-backdrop',
+                  // macOS Desktop excludes interactive controls only inside marked
+                  // window-drag rows (DSH 0.2.2-rc.1 upgrade); this overlay covers a
+                  // drag row, so it declares its own non-drag region.
+                  'data-window-drag-exclude': '',
                   onMouseDown: (event) => {
                     if (event.target === event.currentTarget) closeConfirm();
                   },

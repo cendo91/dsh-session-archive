@@ -2,8 +2,8 @@
 
 DeepSeek Harness Web UI plugin. This directory is the repository root.
 
-- Current release: **1.0.1**
-- Tested DSH: **0.2.1-rc.5**, **0.2.2-rc.1**
+- Current release: **1.0.2**
+- Tested DSH: **0.2.1-rc.5**, **0.2.2-rc.1**, **0.2.2-rc.3**
 - npm: `@cendo91/dsh-session-archive`
 - GitHub: `cendo91/dsh-session-archive`
 
@@ -51,8 +51,8 @@ git push origin vX.Y.Z
 ## Install forms
 
 ```text
-@cendo91/dsh-session-archive@1.0.1
-github:cendo91/dsh-session-archive#v1.0.1
+@cendo91/dsh-session-archive@1.0.2
+github:cendo91/dsh-session-archive#v1.0.2
 <absolute path to this directory>     # local development
 ```
 

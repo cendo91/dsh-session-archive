@@ -1,6 +1,6 @@
 {
   "name": "@cendo91/dsh-session-archive",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "description": "DSH Web UI panel to browse, restore, archive, and permanently delete archived Sessions.",
   "type": "module",

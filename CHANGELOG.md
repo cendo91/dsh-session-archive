@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.2
+
+- Verified against DeepSeek Harness 0.2.2-rc.3. Every DSH surface the plugin uses
+  still exists: `api-session/removed`, `sessionQuery.listSessions` with
+  `SessionRecord.header`/`live`, `header.parentSession`/`origin`, the
+  `workspaceRegistry` archive/pin/detach methods, the Connection Fetch route API,
+  the `sidebar.panellist` and keyed `main` Slots, `locale.register`, all twelve
+  theme tokens in use, and the `$DSH_HOME` storage layout (`sessions/<project>/<id>/`,
+  `storages/session_projcache/sessions/<id>.json`, `storages/workspace.json`).
+- Applied the 0.2.2-rc.1 window-drag-region migration the 1.0.1 verification
+  missed: the delete dialog's full-viewport backdrop now declares
+  `data-window-drag-exclude`, so on macOS Desktop its controls no longer fall
+  inside the header's drag row. Windows and Web behavior is unchanged.
+- Documented two DSH 0.2.2 behaviors that change what deletion leaves behind:
+  archiving can now remove a clean Session worktree (the checkout, never the
+  branch), and deleting an archived Session does not reclaim a retained
+  worktree; `sessions.handleSessionRemoved` is no longer listed by DSH's Client
+  Service inspection, though the shipped browser bundle still implements it.
+- No change to the delete route, the pending queue, the startup sweep, or the UI.
+
 ## 1.0.1
 
 - Verified against DeepSeek Harness 0.2.2-rc.1. No functional changes: the sidebar

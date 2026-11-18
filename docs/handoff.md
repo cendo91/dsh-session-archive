@@ -1,6 +1,6 @@
 # Developer handoff — DSH Session Archive
 
-Last updated: 2026-11-06, release **1.0.1**, DSH **0.2.2-rc.1**.
+Last updated: 2026-11-18, release **1.0.2**, DSH **0.2.2-rc.3**.
 
 This document is the durable memory for future sessions. Read it before changing
 the plugin; only inspect DSH internals when something here is wrong or a test fails.
@@ -90,7 +90,7 @@ Registered as a Cordis plugin with `inject = ['connection', 'sessionPersistence'
 - Locales: namespace `session-archive.ui` registered with `zh` and `en`
   dictionaries; UI text read at call time and re-rendered on locale changes.
 
-## DSH integration points (verified on 0.2.1-rc.5 and 0.2.2-rc.1)
+## DSH integration points (verified on 0.2.1-rc.5, 0.2.2-rc.1, and 0.2.2-rc.3)
 
 | Dependency | Notes |
 |---|---|
@@ -136,9 +136,35 @@ Registered as a Cordis plugin with `inject = ['connection', 'sessionPersistence'
 
 ### No official deletion API
 
-As of 0.2.2-rc.1, `sessions` has no dispose/delete, `workspaceRegistry` has no
+As of 0.2.2-rc.3, `sessions` has no dispose/delete, `workspaceRegistry` has no
 delete-Session, and `sessionController` has no delete. The plugin’s file-level
 maintenance remains necessary. A future official API should replace it.
+
+### What changed between 0.2.2-rc.1 and 0.2.2-rc.3
+
+Verified on the installed 0.2.2-rc.3 Desktop build; the upgrade-guide index has no
+`v0.2.2-rc.2` or `v0.2.2-rc.3` section, so no documented surface break applies.
+Every dependency in the table above was re-checked in the running build and in
+`@deepseek-ai` package sources:
+
+- `include:session-archive` is `active`; `sidebar.panellist` and the keyed `main`
+  slot both carry the plugin’s `session-archive` entry as active occupants, and
+  the standard slot props still include `useSessions`/`useWorkspaces`.
+- `sessions.handleSessionRemoved(id)` is **no longer listed** by Client Service
+  inspection (the catalog now shows retain/using/retainInfo/refreshProjections/
+  search/fork/scope/binding), but the shipped browser bundle still implements it
+  and the shipped `api-session/removed` dispatcher still calls it. Keep the
+  `typeof … === 'function'` guard in `dropSessions`; treat the call as an
+  undocumented fallback that may disappear.
+- All twelve `--dsw-alias-*` tokens used in CSS still exist in the live theme.
+- The 0.2.2-rc.1 window-drag-region guide **does** apply to this plugin: the
+  delete dialog’s `position: fixed; inset: 0` backdrop covers a `data-window-drag`
+  row, so it now carries `data-window-drag-exclude`. macOS Desktop only; Windows
+  and Web behavior is unchanged.
+- The 0.2.2-rc.1 archive-worktree guide also applies to user expectations:
+  archiving a Session can now `git worktree remove` a clean checkout it created
+  (branch and commits survive), `retainOnArchive` keeps it, and a Session’s
+  worktree is not part of what this plugin deletes.
 
 ## Deletion semantics
 
@@ -226,6 +252,11 @@ here and in `AGENTS.md`.
 - A Session loaded in the current app run cannot be deleted immediately; it is
   queued to the next DSH start.
 - Shared attachments are not garbage-collected.
+- Worktrees are not part of deletion: archiving may have removed the checkout
+  (0.2.2 behavior) or kept it (`retainOnArchive`, a dirty checkout, or a pre-0.2.2
+  Session); the branch and any retained checkout survive this plugin’s delete.
+- `$DSH_HOME/session-archive/pending.json` is plugin-owned; deleting it cancels
+  queued deletions.
 - Windows file locks can make removal fail; the route reports the error and the
   queue retries on the next start.
 - The plugin depends on internal event names, client service methods, and the

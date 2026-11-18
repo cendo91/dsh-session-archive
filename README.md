@@ -7,7 +7,7 @@ English | [中文](#中文说明)
 ## Requirements
 
 - DeepSeek Harness 0.2.x with the Web UI (Desktop Web or standalone Web profile).
-- Tested with **0.2.1-rc.5** and **0.2.2-rc.1**. No runtime dependencies and no build step.
+- Tested with **0.2.1-rc.5**, **0.2.2-rc.1**, and **0.2.2-rc.3**. No runtime dependencies and no build step.
 
 ## Install
 
@@ -15,10 +15,10 @@ Open **Settings → Plugins → Add** and use one of:
 
 ```text
 # GitHub (recommended until the first npm release; pin a tag)
-github:cendo91/dsh-session-archive#v1.0.0
+github:cendo91/dsh-session-archive#v1.0.2
 
 # npm
-@cendo91/dsh-session-archive@1.0.0
+@cendo91/dsh-session-archive@1.0.2
 
 # local checkout (absolute path to this folder)
 C:\path\to\dsh-session-archive
@@ -41,6 +41,7 @@ Refresh the page after installation. If the running Host process cannot load the
 | Subagent Session logs recorded under that Session | yes |
 | Projection cache `storages/session_projcache/sessions/<id>.json` | yes |
 | Archive, pin, and workspace ownership entries | yes |
+| A Session worktree checkout created by DSH outside `$DSH_HOME` | **no** |
 | Workspace project files, code, documents | **no** |
 | Shared attachments (content-addressed) | **no** |
 
@@ -62,9 +63,15 @@ Cold Sessions (not loaded in this app run) are deleted immediately.
 The plugin relies on DSH internals and is version-sensitive:
 
 - the `api-session/removed` forwarded Remote event;
-- the client `sessions` store and its `handleSessionRemoved` reduction;
+- the client `sessions` service and its `handleSessionRemoved` reduction (present in
+  the shipped browser bundle since 0.2.2, but no longer listed by DSH's Client
+  Service inspection; the plugin treats it as an optional fallback);
 - the JSONL Session layout under `$DSH_HOME/sessions`;
 - `$DSH_HOME/storages/session_projcache` and `$DSH_HOME/storages/workspace.json`.
+
+Since 0.2.2, archiving a Session may delete a clean Git worktree that DSH created
+for it (the branch and commits remain). Deletion in this plugin covers DSH-owned
+Session data only, so a retained worktree is left in place.
 
 DSH upgrades may change any of them. `package.json` declares `engines.dsh` to block clearly incompatible installations, but re-test deletion after every DSH upgrade. A future DSH version that adds a real Session-deletion API should replace the file-level maintenance in this plugin.
 
@@ -102,10 +109,10 @@ MIT. See [LICENSE](LICENSE).
 
 ```text
 # GitHub（npm 首发前推荐，建议锁定 tag）
-github:cendo91/dsh-session-archive#v1.0.0
+github:cendo91/dsh-session-archive#v1.0.2
 
 # npm
-@cendo91/dsh-session-archive@1.0.0
+@cendo91/dsh-session-archive@1.0.2
 
 # 本地目录（此文件夹的绝对路径）
 C:\path\to\dsh-session-archive
@@ -123,7 +130,7 @@ C:\path\to\dsh-session-archive
 
 **会删除**：该会话在 `$DSH_HOME/sessions/` 下的全部日志版本、它的子代理会话日志、投影缓存 `storages/session_projcache/sessions/<id>.json`，以及归档、置顶、工作区归属登记。
 
-**不会删除**：工作区里的项目文件、代码、文档；共享附件（内容寻址，可能被其他会话引用）。
+**不会删除**：工作区里的项目文件、代码、文档；共享附件（内容寻址，可能被其他会话引用）；DSH 在 `$DSH_HOME` 之外为该会话创建的 Git 工作树检出目录（0.2.2 起归档时可能已由 DSH 自行清理，分支与提交始终保留）。
 
 ### 仍被加载的会话
 
@@ -134,7 +141,7 @@ DSH 没有公开的「卸载当前运行中会话」接口。对这类会话点�
 - 删除**不可恢复**，确认框会列出范围；
 - 删除接口走 Connection 的已认证 Fetch 通道，浏览器只提交会话 ID；路径由 `$DSH_HOME` 推导并校验，拒绝路径穿越和符号链接目录；
 - 不访问网络、无遥测；
-- 依赖 DSH 内部事件与磁盘布局（`api-session/removed`、客户端 `sessions` 服务、`$DSH_HOME/sessions`、`storages/session_projcache`、`storages/workspace.json`）。DSH 升级后请重新测试删除；`engines.dsh` 会阻止明显不兼容的版本安装。
+- 依赖 DSH 内部事件与磁盘布局（`api-session/removed`、客户端 `sessions` 服务及其 `handleSessionRemoved`、`$DSH_HOME/sessions`、`storages/session_projcache`、`storages/workspace.json`）。其中 `handleSessionRemoved` 自 0.2.2 起不再出现在 DSH 的客户端服务清单里，但仍存在于浏览器包中，插件按可选回退处理。DSH 升级后请重新测试删除；`engines.dsh` 会阻止明显不兼容的版本安装。
 
 ### 开发
 
