@@ -1,6 +1,6 @@
 # Developer handoff — DSH Session Archive
 
-Last updated: 2026-11-18, release **1.0.2**, DSH **0.2.2-rc.3**.
+Last updated: 2026-11-25, release **1.0.3**, DSH **0.2.2-rc.5**.
 
 This document is the durable memory for future sessions. Read it before changing
 the plugin; only inspect DSH internals when something here is wrong or a test fails.
@@ -90,7 +90,7 @@ Registered as a Cordis plugin with `inject = ['connection', 'sessionPersistence'
 - Locales: namespace `session-archive.ui` registered with `zh` and `en`
   dictionaries; UI text read at call time and re-rendered on locale changes.
 
-## DSH integration points (verified on 0.2.1-rc.5, 0.2.2-rc.1, and 0.2.2-rc.3)
+## DSH integration points (verified on 0.2.1-rc.5, 0.2.2-rc.1, 0.2.2-rc.3, and 0.2.2-rc.5)
 
 | Dependency | Notes |
 |---|---|
@@ -165,6 +165,26 @@ Every dependency in the table above was re-checked in the running build and in
   archiving a Session can now `git worktree remove` a clean checkout it created
   (branch and commits survive), `retainOnArchive` keeps it, and a Session’s
   worktree is not part of what this plugin deletes.
+
+### What changed between 0.2.2-rc.3 and 0.2.2-rc.5
+
+Verified on the installed 0.2.2-rc.5 Desktop build. Two guides cover the range and
+both miss this plugin:
+
+- `v0.2.2-rc.3/deepseek-refusal-code` — the DeepSeek streamed content-refusal code
+  becomes `CONTENT_REFUSED`; the plugin never inspects LLM error codes.
+- `v0.2.2-rc.4/web-search-deepseek-model-default` — the shipped composition stops
+  pinning a search provider; the plugin has no web-search surface.
+
+There is no `v0.2.2-rc.5` section in the index. On the running build the plugin
+entry is `active`, `session-archive` still occupies `sidebar.panellist` and the
+keyed `main` slot, `sessions.handleSessionRemoved` is still implemented in the
+shipped browser bundle (same `manager.js`/`service.js` lines), the theme token set
+is still the same 14 names, and `$DSH_HOME` still holds `storages/workspace.json`
+(with `archivedSessionIds`), `storages/session_projcache/sessions/<id>.json`, and
+`sessions/<project>/<id>/`. `WorkspaceArchiveError` and `workspace/session-active`
+are unchanged, and `workspaceRegistry.unarchiveSession`/`unpinSession` still skip
+session-existence checks, which is what makes deleting an id safe here.
 
 ## Deletion semantics
 

@@ -7,7 +7,7 @@ English | [中文](#中文说明)
 ## Requirements
 
 - DeepSeek Harness 0.2.x with the Web UI (Desktop Web or standalone Web profile).
-- Tested with **0.2.1-rc.5**, **0.2.2-rc.1**, and **0.2.2-rc.3**. No runtime dependencies and no build step.
+- Tested with **0.2.1-rc.5**, **0.2.2-rc.1**, **0.2.2-rc.3**, and **0.2.2-rc.5**. No runtime dependencies and no build step.
 
 ## Install
 
@@ -15,10 +15,10 @@ Open **Settings → Plugins → Add** and use one of:
 
 ```text
 # GitHub (recommended until the first npm release; pin a tag)
-github:cendo91/dsh-session-archive#v1.0.2
+github:cendo91/dsh-session-archive#v1.0.3
 
 # npm
-@cendo91/dsh-session-archive@1.0.2
+@cendo91/dsh-session-archive@1.0.3
 
 # local checkout (absolute path to this folder)
 C:\path\to\dsh-session-archive
@@ -109,10 +109,10 @@ MIT. See [LICENSE](LICENSE).
 
 ```text
 # GitHub（npm 首发前推荐，建议锁定 tag）
-github:cendo91/dsh-session-archive#v1.0.2
+github:cendo91/dsh-session-archive#v1.0.3
 
 # npm
-@cendo91/dsh-session-archive@1.0.2
+@cendo91/dsh-session-archive@1.0.3
 
 # 本地目录（此文件夹的绝对路径）
 C:\path\to\dsh-session-archive

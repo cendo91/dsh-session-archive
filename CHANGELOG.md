@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.3
+
+- Verified against DeepSeek Harness 0.2.2-rc.5. Documentation-only release: the
+  plugin code is unchanged from 1.0.2.
+- The two upgrade guides between 0.2.2-rc.3 and 0.2.2-rc.5 (`v0.2.2-rc.3/deepseek-refusal-code`,
+  `v0.2.2-rc.4/web-search-deepseek-model-default`) touch DeepSeek error codes and
+  web-search defaults, neither of which this plugin consumes.
+- Re-checked every surface on the running 0.2.2-rc.5 build: plugin entry `active`,
+  `session-archive` still occupies `sidebar.panellist` and the keyed `main` slot,
+  `api-session/removed` still allowlisted, `sessions.handleSessionRemoved` still
+  implemented in the shipped browser bundle, `sessionQuery.listSessions` and
+  `SessionRecord{header,live}`, `workspaceRegistry` unarchive/unpin without
+  existence checks, `Workspace.detachSession`, `WorkspaceArchiveError` +
+  `workspace/session-active`, the Connection Fetch route shape, the theme tokens
+  in use, and the `$DSH_HOME` storage layout are all unchanged.
+
 ## 1.0.2
 
 - Verified against DeepSeek Harness 0.2.2-rc.3. Every DSH surface the plugin uses
