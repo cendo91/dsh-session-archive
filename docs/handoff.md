@@ -231,6 +231,16 @@ git push origin vX.Y.Z
   - Diagnose auth before publishing, never from the publish error: an expired or
     revoked token makes `PUT` answer **404 Not Found** (`@cendo91/dsh-session-archive@X
     is not in this registry`), not 401. Run `npm whoami` first; a 401 means rotate.
+  - This package uses **staged publishing**: a token without **Bypass 2FA** uploads
+    the version into the staging area instead of going live (`npm view … version`
+    stays on the old version, `dist-tags.latest` unchanged, while the registry
+    `time` object already lists the new one; a second publish then fails with
+    `E409 … Cannot publish over previously staged version`). `npm whoami` passing
+    is not evidence the token can publish directly. Approve it on npmjs.com →
+    **Staged Packages**, or `npx -y npm@11 stage list <pkg>` + `stage approve
+    <stage-id>`; both require an interactive 2FA code. A token with Bypass 2FA
+    publishes straight through. Verify with `npm view <pkg> version` before
+    tagging.
   - Rotating: npmjs.com → avatar → Access Tokens → Generate New Token → Granular,
     package `@cendo91/dsh-session-archive` (or the `@cendo91` scope), permissions
     **Read and write (publish and stage)** (stage-only refuses plain `npm publish`),
